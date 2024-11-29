@@ -1,16 +1,15 @@
 <?php
-
 /**
  * Strategy Interface: Contract that defines the methods all it's implementations should have
  */
-interface ProductInterface {
+interface ProductStrategy {
 	public function getPrice(): float;
 
 	public function getDiscount(): float;
 }
 
 // Concrete Strategies
-class Keyboard implements ProductInterface {
+class Keyboard implements ProductStrategy {
 
 	public function getPrice(): float {
 		return 40.20;
@@ -21,7 +20,7 @@ class Keyboard implements ProductInterface {
 	}
 }
 
-class Notebook implements ProductInterface {
+class Notebook implements ProductStrategy {
 
 	public function getPrice(): float {
 		return 480;
@@ -34,25 +33,26 @@ class Notebook implements ProductInterface {
 
 // Context class
 class Product {
-	private ProductInterface $productInterface;
+	private ProductStrategy $productStrategy;
 
-	public function __construct(ProductInterface $productInterface) {
-		$this->productInterface = $productInterface;
+	public function __construct(ProductStrategy $productInterface) {
+		$this->productStrategy = $productInterface;
 	}
 
-	public function setProduct(ProductInterface $productInterface): void {
-		$this->productInterface = $productInterface;
+	public function setProduct(ProductStrategy $productInterface): void {
+		$this->productStrategy = $productInterface;
 	}
 
 	public function getProductPrice(): float {
-		return $this->productInterface->getPrice();
+		return $this->productStrategy->getPrice();
 	}
 
 	public function getProductDiscount(): float {
-		return $this->productInterface->getDiscount() * 100;
+		return $this->productStrategy->getDiscount() * 100;
 	}
 }
 
+// Client code
 $product = new Product(new Notebook());
 $notebook_price = $product->getProductPrice();
 $notebook_discount = $product->getProductDiscount();
